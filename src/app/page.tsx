@@ -429,26 +429,26 @@ export default function Home() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="dashboard" className="gap-2">
+          <TabsList className="grid w-full grid-cols-3 sm:grid-cols-5 gap-2">
+            <TabsTrigger value="dashboard" className="gap-1 sm:gap-2 flex-col sm:flex-row py-2">
               <TrendingUp className="w-4 h-4" />
-              Dashboard
+              <span className="text-xs sm:text-sm">Dashboard</span>
             </TabsTrigger>
-            <TabsTrigger value="rides" className="gap-2">
+            <TabsTrigger value="rides" className="gap-1 sm:gap-2 flex-col sm:flex-row py-2">
               <FileText className="w-4 h-4" />
-              Corridas
+              <span className="text-xs sm:text-sm">Corridas</span>
             </TabsTrigger>
-            <TabsTrigger value="ranking" className="gap-2">
+            <TabsTrigger value="ranking" className="gap-1 sm:gap-2 flex-col sm:flex-row py-2">
               <Trophy className="w-4 h-4" />
-              Ranking
+              <span className="text-xs sm:text-sm">Ranking</span>
             </TabsTrigger>
-            <TabsTrigger value="chat" className="gap-2">
+            <TabsTrigger value="chat" className="gap-1 sm:gap-2 flex-col sm:flex-row py-2">
               <MessageSquare className="w-4 h-4" />
-              Chat
+              <span className="text-xs sm:text-sm">Chat</span>
             </TabsTrigger>
-            <TabsTrigger value="settings" className="gap-2">
+            <TabsTrigger value="settings" className="gap-1 sm:gap-2 flex-col sm:flex-row py-2 col-span-3 sm:col-span-1">
               <Settings className="w-4 h-4" />
-              Configurações
+              <span className="text-xs sm:text-sm">Configurações</span>
             </TabsTrigger>
           </TabsList>
 
