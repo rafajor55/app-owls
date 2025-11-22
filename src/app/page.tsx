@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Eye, TrendingUp, Clock, DollarSign, Plus, Menu, LogOut, Settings, MessageSquare, Trophy, FileText, Send, Download, Link as LinkIcon, RefreshCw } from 'lucide-react';
+import { Eye, TrendingUp, Clock, DollarSign, Plus, Menu, LogOut, Settings, MessageSquare, Trophy, FileText, Send, Download, Link as LinkIcon, RefreshCw, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -54,6 +54,15 @@ export default function Home() {
     other: ''
   });
 
+  // Estado para editar perfil
+  const [showEditProfile, setShowEditProfile] = useState(false);
+  const [editProfile, setEditProfile] = useState({
+    name: '',
+    phone: '',
+    city: '',
+    instagram: ''
+  });
+
   // Dados mockados para demonstração
   const [dailySummary, setDailySummary] = useState<DailySummary>({
     date: new Date(),
@@ -93,6 +102,18 @@ export default function Home() {
       document.documentElement.classList.remove('dark');
     }
   }, [darkMode]);
+
+  // Atualizar dados do perfil quando usuário mudar
+  useEffect(() => {
+    if (user) {
+      setEditProfile({
+        name: user.name,
+        phone: user.phone,
+        city: user.city,
+        instagram: user.instagram || ''
+      });
+    }
+  }, [user]);
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -210,6 +231,19 @@ export default function Home() {
     setShowAddExpense(false);
   };
 
+  const handleSaveProfile = () => {
+    if (user) {
+      setUser({
+        ...user,
+        name: editProfile.name,
+        phone: editProfile.phone,
+        city: editProfile.city,
+        instagram: editProfile.instagram || undefined
+      });
+    }
+    setShowEditProfile(false);
+  };
+
   // Conectar com Uber
   const handleConnectUber = async () => {
     if (!user) return;
@@ -304,11 +338,11 @@ export default function Home() {
             <div className="flex justify-center mb-6">
               <img 
                 src="https://k6hrqrxuu8obbfwn.public.blob.vercel-storage.com/temp/6d3d77ec-5947-480e-a0a4-03a0906ff69c.jpg" 
-                alt="Wol's Logo" 
+                alt="Owl's Logo" 
                 className="h-32 w-auto object-contain"
               />
             </div>
-            <CardTitle className="text-4xl font-black tracking-wider" style={{ fontFamily: 'Impact, "Arial Black", sans-serif', letterSpacing: '0.1em' }}>WOL'S</CardTitle>
+            <CardTitle className="text-4xl font-black tracking-wider drop-shadow-lg" style={{ fontFamily: 'Impact, "Arial Black", sans-serif', letterSpacing: '0.1em' }}>OWL'S</CardTitle>
             <CardDescription>Controle Financeiro para Motoristas</CardDescription>
           </CardHeader>
           <CardContent>
@@ -377,11 +411,11 @@ export default function Home() {
             <div className="flex items-center gap-3">
               <img 
                 src="https://k6hrqrxuu8obbfwn.public.blob.vercel-storage.com/temp/6d3d77ec-5947-480e-a0a4-03a0906ff69c.jpg" 
-                alt="Wol's Logo" 
+                alt="Owl's Logo" 
                 className="h-10 w-auto"
               />
               <div>
-                <h1 className="text-xl font-bold">Wol's</h1>
+                <h1 className="text-xl font-bold drop-shadow-lg" style={{ fontFamily: 'Impact, "Arial Black", sans-serif', letterSpacing: '0.1em' }}>OWL'S</h1>
                 <p className="text-sm text-muted-foreground">Olá, {user?.name}</p>
               </div>
             </div>
@@ -429,34 +463,38 @@ export default function Home() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 sm:grid-cols-5 gap-2">
-            <TabsTrigger value="dashboard" className="gap-1 sm:gap-2 flex-col sm:flex-row py-2">
-              <TrendingUp className="w-4 h-4" />
-              <span className="text-xs sm:text-sm">Dashboard</span>
+          <TabsList className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white h-auto items-center justify-center rounded-lg p-1 grid w-full grid-cols-3 md:grid-cols-6 gap-1 shadow-lg">
+            <TabsTrigger value="dashboard" className="gap-1 flex-col py-1.5 px-2 text-[10px] sm:text-xs data-[state=active]:bg-white data-[state=active]:text-blue-600 hover:bg-white/20 transition-all">
+              <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span>Dashboard</span>
             </TabsTrigger>
-            <TabsTrigger value="rides" className="gap-1 sm:gap-2 flex-col sm:flex-row py-2">
-              <FileText className="w-4 h-4" />
-              <span className="text-xs sm:text-sm">Corridas</span>
+            <TabsTrigger value="rides" className="gap-1 flex-col py-1.5 px-2 text-[10px] sm:text-xs data-[state=active]:bg-white data-[state=active]:text-blue-600 hover:bg-white/20 transition-all">
+              <FileText className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span>Corridas</span>
             </TabsTrigger>
-            <TabsTrigger value="ranking" className="gap-1 sm:gap-2 flex-col sm:flex-row py-2">
-              <Trophy className="w-4 h-4" />
-              <span className="text-xs sm:text-sm">Ranking</span>
+            <TabsTrigger value="ranking" className="gap-1 flex-col py-1.5 px-2 text-[10px] sm:text-xs data-[state=active]:bg-white data-[state=active]:text-blue-600 hover:bg-white/20 transition-all">
+              <Trophy className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span>Ranking</span>
             </TabsTrigger>
-            <TabsTrigger value="chat" className="gap-1 sm:gap-2 flex-col sm:flex-row py-2">
-              <MessageSquare className="w-4 h-4" />
-              <span className="text-xs sm:text-sm">Chat</span>
+            <TabsTrigger value="chat" className="gap-1 flex-col py-1.5 px-2 text-[10px] sm:text-xs data-[state=active]:bg-white data-[state=active]:text-blue-600 hover:bg-white/20 transition-all">
+              <MessageSquare className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span>Chat</span>
             </TabsTrigger>
-            <TabsTrigger value="settings" className="gap-1 sm:gap-2 flex-col sm:flex-row py-2 col-span-3 sm:col-span-1">
-              <Settings className="w-4 h-4" />
-              <span className="text-xs sm:text-sm">Configurações</span>
+            <TabsTrigger value="profile" className="gap-1 flex-col py-1.5 px-2 text-[10px] sm:text-xs data-[state=active]:bg-white data-[state=active]:text-blue-600 hover:bg-white/20 transition-all">
+              <User className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span>Perfil</span>
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="gap-1 flex-col py-1.5 px-2 text-[10px] sm:text-xs data-[state=active]:bg-white data-[state=active]:text-blue-600 hover:bg-white/20 transition-all">
+              <Settings className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span>Config</span>
             </TabsTrigger>
           </TabsList>
 
           {/* Dashboard */}
           <TabsContent value="dashboard" className="space-y-6">
-            {/* Cards de Resumo */}
+            {/* Cards de Resumo - 30% menores */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <Card>
+              <Card className="scale-[0.7] origin-top-left md:scale-100 md:origin-center">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">Total de Ganhos</CardTitle>
                 </CardHeader>
@@ -466,7 +504,7 @@ export default function Home() {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="scale-[0.7] origin-top-left md:scale-100 md:origin-center">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">Despesas</CardTitle>
                 </CardHeader>
@@ -482,7 +520,7 @@ export default function Home() {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="scale-[0.7] origin-top-left md:scale-100 md:origin-center">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">Lucro Líquido</CardTitle>
                 </CardHeader>
@@ -494,7 +532,7 @@ export default function Home() {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="scale-[0.7] origin-top-left md:scale-100 md:origin-center">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">Tempo Online</CardTitle>
                 </CardHeader>
@@ -648,36 +686,65 @@ export default function Home() {
             </Card>
           </TabsContent>
 
+          {/* Perfil */}
+          <TabsContent value="profile">
+            <Card>
+              <CardHeader>
+                <CardTitle>Meu Perfil</CardTitle>
+                <CardDescription>Visualize e edite suas informações pessoais</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid gap-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Nome:</span>
+                    <span className="font-medium">{user?.name}</span>
+                  </div>
+                  <Separator />
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">E-mail:</span>
+                    <span className="font-medium">{user?.email}</span>
+                  </div>
+                  <Separator />
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Telefone:</span>
+                    <span className="font-medium">{user?.phone}</span>
+                  </div>
+                  <Separator />
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Cidade:</span>
+                    <span className="font-medium">{user?.city}</span>
+                  </div>
+                  {user?.instagram && (
+                    <>
+                      <Separator />
+                      <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">Instagram:</span>
+                        <span className="font-medium">{user.instagram}</span>
+                      </div>
+                    </>
+                  )}
+                  {user?.isAdmin && (
+                    <>
+                      <Separator />
+                      <Badge variant="destructive" className="w-fit">Administrador</Badge>
+                    </>
+                  )}
+                </div>
+
+                <Button 
+                  onClick={() => setShowEditProfile(true)}
+                  className="w-full gap-2"
+                >
+                  <User className="w-4 h-4" />
+                  Editar Perfil
+                </Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           {/* Configurações */}
           <TabsContent value="settings">
             <div className="space-y-6">
-              {/* Informações do Perfil */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Informações do Perfil</CardTitle>
-                  <CardDescription>Gerencie suas preferências e perfil</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid gap-2">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Nome:</span>
-                      <span className="font-medium">{user?.name}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">E-mail:</span>
-                      <span className="font-medium">{user?.email}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Cidade:</span>
-                      <span className="font-medium">{user?.city}</span>
-                    </div>
-                    {user?.isAdmin && (
-                      <Badge variant="destructive" className="w-fit">Administrador</Badge>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-
               {/* Integrações */}
               <Card>
                 <CardHeader>
@@ -953,6 +1020,63 @@ export default function Home() {
                 Cancelar
               </Button>
               <Button className="flex-1" onClick={handleAddExpense}>
+                Salvar
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog Editar Perfil */}
+      <Dialog open={showEditProfile} onOpenChange={setShowEditProfile}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Editar Perfil</DialogTitle>
+            <DialogDescription>Atualize suas informações pessoais</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>Nome Completo</Label>
+              <Input 
+                placeholder="Seu nome"
+                value={editProfile.name}
+                onChange={(e) => setEditProfile({...editProfile, name: e.target.value})}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Telefone</Label>
+              <Input 
+                type="tel"
+                placeholder="(11) 99999-9999"
+                value={editProfile.phone}
+                onChange={(e) => setEditProfile({...editProfile, phone: e.target.value})}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Cidade</Label>
+              <Input 
+                placeholder="São Paulo"
+                value={editProfile.city}
+                onChange={(e) => setEditProfile({...editProfile, city: e.target.value})}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Instagram (opcional)</Label>
+              <Input 
+                placeholder="@seuperfil"
+                value={editProfile.instagram}
+                onChange={(e) => setEditProfile({...editProfile, instagram: e.target.value})}
+              />
+            </div>
+
+            <div className="flex gap-2">
+              <Button variant="outline" className="flex-1" onClick={() => setShowEditProfile(false)}>
+                Cancelar
+              </Button>
+              <Button className="flex-1" onClick={handleSaveProfile}>
                 Salvar
               </Button>
             </div>
